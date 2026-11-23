@@ -3,7 +3,7 @@ name: controlled-english
 description: "Controlled English (CE) — controlled English that leaves every sentence exactly one meaning, with a Tractatus module that states the truth-conditions of a request and the truth table of a report. Use whenever you write, rewrite or audit English text that people or agents will act on (instructions, procedures, rules, requirements, specifications, contracts, technical reports, pull request descriptions, findings, handoffs) and whenever the user says \"write precisely\", \"unambiguous\", \"remove ambiguity\", \"check if this is unambiguous\", \"controlled English\", \"write in CE\", \"check in CE\" or \"/ce\". Not for fiction, marketing copy or casual chat. For Polish text use Polszczyzna Kontrolowana (PK)."
 ---
 
-# Controlled English (CE) 0.1
+# Controlled English (CE) 0.2
 
 CE is plain English plus a set of rules. Each rule removes one source of sentences that have more than 1 meaning.
 A reader who knows the conventions reads each sentence in exactly 1 way.
@@ -312,6 +312,55 @@ own time.
 it out of every "done" (7). The report says "done" only when every row of the truth table is T. Otherwise the report
 names the F rows and the ? rows.
 
+### S. Software project text (module for repositories, pull requests and coordination)
+
+Use module S for text in a repository where many people and agents work at the same time: claims, findings, test
+reports, pull request descriptions and review comments. In such a repository `main` can change between 2 reads, so a
+sentence about "main" without a commit has more than 1 meaning.
+
+**S1. Name the state.** Every statement about code names the commit: "`main` at `dde82f27`", "head `98cc5de1`". Write a
+commit hash with at least 8 characters. Write a location as `file:line` at a commit: "`tools/rdna2spirv.py:6722` at
+`dde82f27`". Rule T6 applies: a state at one commit is not a state at another commit.
+
+**S2. Code in code format.** Put every identifier, path, command, flag and test name in backticks. Do not translate,
+shorten or paraphrase an identifier.
+
+**S3. Claims and findings.** Write 1 claim or 1 finding per line, in the command form the project uses.
+- `claiming: <ID>` or `claiming: <file>: <symptom> (<scope>)`
+- `finding: <one line>`, then 3 lines: "Where:" (`file:line` at a commit), "Why it matters:" (the effect),
+  "Needs:" (hardware, data files or "nothing").
+
+**S4. Test reports.** Pattern: "Tested `<head>` on <OS, Python, GPU and driver>: pass." or "Tested `<head>` merged with
+`main` at `<sha>` on <OS, ...>: fail." Then give each command with its result: "`python -I tests/test_x.py` → 12 tests
+OK". A report about a head alone says "head". A report about the merge says "merged". A head that passes does not make
+the merge pass (rule T6).
+
+**S5. Pull request descriptions.** Write the sections in this order:
+1. Item: the item ID or the link to the claim.
+2. What and why: the change and the defect or need behind it, with `file:line` at the base commit.
+3. Tested: the reports of rule S4.
+4. Depends on: `#N` for each pull request this one builds on or conflicts with.
+5. Disclosure: "AI-assisted." when an agent wrote any part.
+6. Data: the project's data statement, for example "No game data."
+
+**S6. Review comments.** Write the parts in this order: what you checked (head, `main` commit, platform); steps to
+reproduce (commands a maintainer can paste); observed result; expected result; cause (a commit or a pull request on
+`main`); suggestion. Comment only on a defect you reproduced. "LGTM", "looks good" and "works for me" are tautologies
+(rule T5). Write what you checked instead.
+
+**S7. Measured claims in documents.** Every count or result names the measurement: "26 503 of 26 503 shaders translate
+(LLVM 23.1.5, Linux, at `c432cdc`)". A claim without a measurement starts with "Hypothesis:".
+
+**S8. Times in UTC.** In a thread that spans time zones, write the date and the time in UTC: "2026-11-23 18:02 UTC".
+
+**S9. Overlaps.** Before a claim, search the open pull requests for the same file and the same symptom. In the pull
+request, name every overlap: "Overlaps #N: same hunk in `tools/x.py`."
+
+- Wrong: "Fixed the flaky test, should be good now, tested locally."
+- Right: "Item: TEST-1700. `tests/test_x.py:42` at `dde82f27` waited a fixed 1 s; the test now waits for the file.
+  Tested `abcd1234` merged with `main` at `dde82f27` on Linux, Python 3.12: `python -I tests/test_x.py` → 6 tests OK
+  in 20 runs. AI-assisted. No game data."
+
 ## Banned words
 
 | Do not write | Reason | Write |
@@ -333,6 +382,8 @@ names the F rows and the ? rows.
 | etc., and so on, and others | open list | a full list or "Examples (incomplete list):" |
 | any, certain, various, some | no quantity | "every", "exactly 1", "at least 1" |
 | probably, apparently, likely, seems, should work | no source | a marker from module F |
+| LGTM, looks good, works for me, should be fine | tautology (rule T5) | what was checked, at which commit (rule S6) |
+| main (without a commit) | `main` moves | "`main` at `<sha>`" (rule S1) |
 | it, this, that, they, them, its, their (instead of a name) | refers to 2 objects | the object's name |
 | an opening "-ing" or "-ed" clause | hidden actor and order | a full sentence |
 | set up, carry out, figure out, deal with (phrasal verbs) | meaning differs from the parts | a single verb |

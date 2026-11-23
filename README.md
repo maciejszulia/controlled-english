@@ -4,7 +4,7 @@ A rule set and a Claude skill for English text that people or agents act on: eve
 and every report says which of its claims were checked. CE is the English counterpart of
 [Polszczyzna Kontrolowana (PK)](https://github.com/maciejszulia/polszczyzna-kontrolowana).
 
-Version 0.1. Author: Maciej Szulia. Full standard: [`SKILL.md`](skills/controlled-english/SKILL.md).
+Version 0.2. Author: Maciej Szulia. Full standard: [`SKILL.md`](skills/controlled-english/SKILL.md).
 
 ## Why
 
@@ -27,6 +27,9 @@ whether "or" excludes, where a range ends, whether "may" permits or predicts. CE
 - **Module T after Wittgenstein's *Tractatus*:** the truth-conditions of a request before work starts and the truth
   table of a claim before a report says "done". It folds in the skills `tractatus-sense` and `tractatus-verify` from
   [tractatus-skills](https://github.com/maciejszulia/tractatus-skills).
+- **Module S for busy repositories:** patterns for claims, findings, test reports ("Tested `<head>` merged with `main`
+  at `<sha>`"), pull request descriptions and review comments. Every statement about code names its commit, because
+  `main` can change between 2 reads.
 - **Banned words** with the reason and the replacement, for example "up to", "any", "unless", "and/or", "should work".
 - **Control:** 8 steps after writing, including a word count script and the 2-meaning test.
 - **Gap rule:** a missing number, date or actor is never guessed. The text keeps the marker `[TBD: what is missing]`.
